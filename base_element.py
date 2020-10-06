@@ -1,4 +1,3 @@
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -8,16 +7,26 @@ class BaseElement(object):
         self.driver = driver
         self.value = value
         self.by = by
+        self.locator = (self.by, self.value)
 
         self.web_element = None
+        self.find()
 
     def find(self):
-        # Must be in this order: by, then value
-        locator = (self.by, self.value)
-        element = WebDriverWait(
-            self.driver, 10).until(
-            EC.visibility_of_element_located(locator=locator))
+        element = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(locator=self.locator)
+        )
         self.web_element = element
         return None
 
-        # By is a class that has attributes such as ID = 'id', XPATH = 'xpath'
+    def click(self):
+        element = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(locator=self.locator)
+        )
+        element.click()
+        return None
+
+    @property
+    def text(self):
+        text = self.web_element.text
+        return text
