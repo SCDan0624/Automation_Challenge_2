@@ -1,6 +1,9 @@
+
 from selenium.webdriver.common.by import By
+
 from .base_element import BaseElement
 from .base_page import BasePage
+from .locator import Locator
 
 
 class TrainingGroundPage(BasePage):
@@ -9,13 +12,8 @@ class TrainingGroundPage(BasePage):
 
     @property
     def button1(self):
-        locator = (By.ID, 'b1')
+        locator = Locator(by=By.ID, value='b1')
         return BaseElement(
             driver=self.driver,
-            by=locator[0],
-            value=locator[1]
+            locator=locator
         )
-
-# Note our custom BaseElement object always has
-# self.locator = (self.by, self.value) which is why by = locator[0]
-# and why value = locator[1]
